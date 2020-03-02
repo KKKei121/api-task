@@ -1,40 +1,80 @@
 import React, {Component} from 'react';
-import logo from './logo.svg';
+import axios from 'axios';
 import './App.css';
+import InfiniteScroll from 'react-infinite-scroller';
+import { Searchbar } from 'react-native-paper';
+
 
 class App extends Component {
-	constructor(props){
-		super(props);
+	constructor(){
+		super();
 		this.state={
-			articles:[]
+			articles: [],
+			hasMoreItems: true,
+			page:1
 		};
-  }
+		this.fetchData = this.fetchData.bind(this);
+	  }
+	
 	componentDidMount(){
-		fetch('https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=24dc597ec27f40729ac17a7231403638')
+		this.fetchNews();
+	}
+
+
+	fetchNews=()=>{
+		axios.get('https://newsapi.org/v2/everything?sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638')
 		.then((response) =>{
 			return response.json();
 		})
-		.then((myJson) => {
-			//console.log(myJson);
+		.then((result) => {
 			this.setState({
-				articles: myJson.articles
+				articles: this.state.articles.concat(result.articles)
+
 			});
-		});	
-	}
+			if(this.state.page<10) {
+				this.setState({
+					page: this.state.page+1
+				});
+			} else {
+				this.setState({
+					hasMoreItems: false
+				})}
+		});	;
+	} 
   
+	componentWillUnmount() {
+		this.serverRequest.abort();
+	  }
+
 	render(){
 		console.log(this.state);
+		const loader = <div className="loader">Loading ...</div>;
+		var firstQuery = '';
 		return (
 			
 			<div className="App">
 				<div className="header">
 					<h2> US News </h2>
+
+					<Searchbar
+        			placeholder="Search"
+       				onChangeText={query => { this.setState({ firstQuery: query }); }}
+       				value={firstQuery}
+      				/>
 				</div>
-				<div className="row">
+				
+				
+				<InfiniteScroll
+                pageStart={0}
+                loadMore={this.fetchNews}
+				hasMore={this.state.hasMoreItems}
+                loader={loader}>
+
+            
 				{this.state.articles.map((item, index)=>{
 					return(
 						
-						<div className="content" key={index}>
+						<div className="news-card" key={index}>
 							
 							<div>
 								<h3>
@@ -44,7 +84,7 @@ class App extends Component {
 								</h3>
 								<p>{item.publishedAt}</p>
 								
-								<img src={item.urlToImage}/>
+								<img className="image" src={item.urlToImage}/>
 
 								<p>{item.description} </p>
 							</div>
@@ -52,10 +92,14 @@ class App extends Component {
 					
 					)
 					
-				})}
-				</div>	
+				})}	
+                
+            	</InfiniteScroll>
+				
+				
 			</div>
 		);
 	}
 }
+
 export default App;
