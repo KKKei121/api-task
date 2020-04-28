@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import './App.css';
-import axios from 'axios';
 import InfiniteScroll from 'react-infinite-scroller';
 import {News} from './News.js';
 
@@ -15,26 +14,19 @@ class App extends Component {
 		};
   }
 	componentDidMount(){
-		this.fetchNews();
-	}
-
-
-	fetchNews=()=>{
-		axios.get('https://newsapi.org/v2/everything?sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638')
-		.then((response) =>{
-			this.setState({
-				articles: this.state.articles.concat(response.data.articles)
-			});
-			console.log(response.data);
-			if(this.state.page<10) {
-				this.setState({
-					page: this.state.page+1
-				});
-			} else {
-				this.setState({
-					hasMoreItems: false
-				})};
+		this.setState({
+			articles: this.state.articles.concat(News(this.state.page))
 		});
+		console.log(News(this.state.page));
+		if(this.state.page<10) {
+			this.setState({
+				page: this.state.page+1
+			});
+		} else {
+			this.setState({
+				hasMoreItems: false
+			})};
+
 	}
   
 	render(){
