@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import './App.css';
+import './App.css';yield
 import InfiniteScroll from 'react-infinite-scroller';
 import {News} from './News.js';
+import {Search} from './searchbar.js'
 
 
 class App extends Component {
@@ -32,7 +33,7 @@ class App extends Component {
 	render(){
 		console.log(this.state);
 		const loader = <div className="loader">Loading ...</div>;
-
+		const list = Search(this.state.articles);
 		return (
 			
 			<div className="App">
@@ -44,12 +45,12 @@ class App extends Component {
 				
 				<InfiniteScroll
                 pageStart={0}
-                loadMore={this.fetchNews}
+                loadMore={this.componentDidMount}
 				hasMore={this.state.hasMoreItems}
                 loader={loader}>
 
 				<div className="row">
-				{this.state.articles.map((item, index)=>{
+				{data.map((item, index)=>{
 					return(
 						
 						<div className="card" key={index}>
@@ -62,14 +63,12 @@ class App extends Component {
 									</a>
 								</h3>
 								<p className='publishedAt'>{item.publishedAt}</p>
-
 								<p className="description">{item.description} </p>
 							</div>
-						</div>
-					)
+						</div>)
 					
 				})}
-				</div>	
+		</div>	
 				</InfiniteScroll>
 				
 			</div>
