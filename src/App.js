@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
-import './App.css';
-import axios from 'axios';
+import './App.css';yield
 import InfiniteScroll from 'react-infinite-scroller';
+import {News} from './News.js';
+import {Search} from './searchbar.js'
 
 
 class App extends Component {
@@ -14,33 +15,25 @@ class App extends Component {
 		};
   }
 	componentDidMount(){
-		this.fetchNews();
-	}
-
-
-	fetchNews=()=>{
-
-		axios.get('https://newsapi.org/v2/everything?sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638')
-		.then((response) =>{
-			this.setState({
-				articles: this.state.articles.concat(response.data.articles)
-			});
-			console.log(response.data);
-			if(this.state.page<10) {
-				this.setState({
-					page: this.state.page+1
-				});
-			} else {
-				this.setState({
-					hasMoreItems: false
-				})};
+		this.setState({
+			articles: this.state.articles.concat(News(this.state.page))
 		});
+		console.log(News(this.state.page));
+		if(this.state.page<10) {
+			this.setState({
+				page: this.state.page+1
+			});
+		} else {
+			this.setState({
+				hasMoreItems: false
+			})};
+
 	}
   
 	render(){
 		console.log(this.state);
 		const loader = <div className="loader">Loading ...</div>;
-
+		const list = Search(this.state.articles);
 		return (
 			
 			<div className="App">
@@ -52,12 +45,12 @@ class App extends Component {
 				
 				<InfiniteScroll
                 pageStart={0}
-                loadMore={this.fetchNews}
+                loadMore={this.componentDidMount}
 				hasMore={this.state.hasMoreItems}
                 loader={loader}>
 
 				<div className="row">
-				{this.state.articles.map((item, index)=>{
+				{data.map((item, index)=>{
 					return(
 						
 						<div className="card" key={index}>
@@ -70,17 +63,12 @@ class App extends Component {
 									</a>
 								</h3>
 								<p className='publishedAt'>{item.publishedAt}</p>
-								
-								
-
 								<p className="description">{item.description} </p>
 							</div>
-						</div>
-					
-					)
+						</div>)
 					
 				})}
-				</div>	
+		</div>	
 				</InfiniteScroll>
 				
 			</div>
