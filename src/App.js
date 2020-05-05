@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import './App.css';yield
+import './App.css';
 import InfiniteScroll from 'react-infinite-scroller';
 import {News} from './News.js';
 import {Search} from './searchbar.js'
@@ -50,7 +50,7 @@ class App extends Component {
                 loader={loader}>
 
 				<div className="row">
-				{data.map((item, index)=>{
+				{list.map((item, index)=>{
 					return(
 						
 						<div className="card" key={index}>
