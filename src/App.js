@@ -2,14 +2,14 @@ import React, {Component} from 'react';
 import './App.css';
 import InfiniteScroll from 'react-infinite-scroller';
 import {News} from './News.js';
-import {Search} from './searchbar.js'
+
 
 
 class App extends Component {
 	constructor(props){
 		super(props);
 		this.state={
-			articles:[],
+			articles: [],
 			hasMoreItems: true,
 			page:1,
 			filter:""
@@ -19,7 +19,8 @@ class App extends Component {
 		this.setState({
 			articles: this.state.articles.concat(News(this.state.page,this.state.filter))
 		});
-		console.log(News(this.state.page,this,state,filter));
+		console.log(News(this.state.page,this.state.filter));
+
 		if(this.state.page<10) {
 			this.setState({
 				page: this.state.page+1
@@ -43,7 +44,7 @@ class App extends Component {
 			<div className="App">
 				<div className="header">
 					<h2> US News </h2>
-					<input value={filter} onChange={this.handleChange} />
+					<input value={this.state.filter} onChange={this.handleChange} />
 				</div>
 
 				
@@ -56,8 +57,8 @@ class App extends Component {
 				<div className="row">
 				{this.state.articles.map((item, index)=>{
 					return(
-						<div>
-							
+						
+							<div className="card" key={index}>
 							<div>
 								<img className="image" src={item.urlToImage}/>
 								<h3 className='link'>
@@ -68,7 +69,8 @@ class App extends Component {
 								<p className='publishedAt'>{item.publishedAt}</p>
 								<p className="description">{item.description} </p>
 							</div>
-						</div>)
+							</div>
+						)
 					
 				})}
 			</div>	
