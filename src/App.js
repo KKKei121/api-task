@@ -49,26 +49,9 @@ class App extends Component {
 				hasMore={this.state.hasMoreItems}
                 loader={loader}>
 
-				<div className="row">
-				{list.map((item, index)=>{
-					return(
-						
-						<div className="card" key={index}>
-							
-							<div>
-								<img className="image" src={item.urlToImage}/>
-								<h3 className='link'>
-									<a href={item.url} target="_blank" >
-										{item.title}
-									</a>
-								</h3>
-								<p className='publishedAt'>{item.publishedAt}</p>
-								<p className="description">{item.description} </p>
-							</div>
-						</div>)
-					
-				})}
-		</div>	
+				<div>
+					<Search articles={this.state.articles}/>
+				</div>	
 				</InfiniteScroll>
 				
 			</div>

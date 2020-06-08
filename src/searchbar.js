@@ -1,40 +1,55 @@
 import React from 'react'
 import './searchbar.css'
-import {News} from './News';
+import './App.css'
 
-export function Search(x) {
-const dataList = x;
-const [searchText, setSearchText] = useState("");
-const [data, setData] = useState(dataList);
-
-  // exclude column list from filter
-  	const excludeColumns = ["source", "author","url","urlToImage","publishedAt","content"];
-
-  // handle change event of search input
-  	const handleChange = value => {
-   		setSearchText(value);
-   		filterData(value);
- 	};
-
-
-
-  // filter records by search text
-  const filterData = (value) => {
-    const lowercasedValue = value.toLowerCase().trim();
-    if (lowercasedValue === "") setData(dataList);
-    else {
-      const filteredData = dataList.filter(item => {
-        return Object.keys(item).some(key =>
-          excludeColumns.includes(key) ? false : item[key].toString().toLowerCase().includes(lowercasedValue)
-        );
-      });
-      setData(filteredData);
-    }
+class Search extends Component {
+  state={
+    filter: "",
+    articles: [],
   };
 
+  handleChange = event => {
+    this.setState({ filter: event.target.value });
+  };
 
+  render() {
+    this.setState({articles: this.prop.articles});
+    const { filter, articles } = this.state;
+    const lowercasedFilter = filter.toLowerCase();
+    const filteredData = articles.filter(item => {
+      return Object.keys(item).some(key =>
+        item[key].toLowerCase().includes(lowercasedFilter)
+      );
+    });
+
+    return (
+      <div>
+        <input value={filter} onChange={this.handleChange} />
+      
+        <div className="row">
+        {filteredData.map((item, index)=>{
+        return(
+    
+          <div className="card" key={index}>
+      
+          <div>
+          <img className="image" src={item.urlToImage}/>
+          <h3 className='link'>
+          <a href={item.url} target="_blank" >
+            {item.title}
+          </a>
+          </h3>
+          <p className='publishedAt'>{item.publishedAt}</p>
+          <p className="description">{item.description} </p>
+        </div>
+      </div>)
   
-  return (data);
+})}
+    </div>
+    </div>);
+  }
 
 }
+
+export default Search;
 
