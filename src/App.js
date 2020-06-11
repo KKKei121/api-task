@@ -53,11 +53,17 @@ class App extends Component {
 
 	handleChange = event => {
 		this.setState({ filter: event.target.value.toLowerCase() });
-	};
+		axios.get('https://newsapi.org/v2/everything?q='+this.state.filter+'&sources=the-washington-post&pageSize='+10*this.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
+		).then((response) =>{
+			this.setState({
+				articles: response.data.articles
+			})
+	});}
   
 	render(){
 		console.log(this.state);
 		const loader = <div className="loader">Loading ...</div>;
+		var DISPLAY = this.state.articles;
 		return (
 			
 			<div className="App">
@@ -74,7 +80,7 @@ class App extends Component {
                 loader={loader}>
 
 				<div className="row">
-				{this.state.articles.map((item, index)=>{
+				{DISPLAY.map((item, index)=>{
 					return(
 						
 							<div className="card" key={index}>
