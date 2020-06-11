@@ -1,23 +1,6 @@
 .App {
   text-align: left;
 }
-
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  position: relative;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-  z-index:10
-}
-
-
-
 .App-link {
   color: #61dafb;
 }
@@ -35,7 +18,6 @@
  .header{
   background-color: #191970;
   color: white;
-
   text-decoration: none;
   font-size: 30px;
   padding-left: 1em;
@@ -46,10 +28,13 @@
   
 }
 
+.form input{
+  float: right;
+}
 .row{
   margin-top:125px;
   display: flex;
-  padding: 15px;
+  padding: 30px;
   flex-wrap: wrap;
   flex-direction: row;
   justify-content: space-evenly;

@@ -21,11 +21,8 @@ class App extends Component {
 		let now = this;
 		if (now.state.hasMoreItems){
 			var URL;
-			if(now.state.filter!=null){
-				URL= 'https://newsapi.org/v2/everything?q='+now.state.filter+'sources=the-washington-post&pageSize='+10*now.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
-			}
-			else
-				URL= 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize='+10*now.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
+			
+			URL= 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize='+10*now.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
 
 			
 			now.fetchNews(URL);
@@ -53,12 +50,18 @@ class App extends Component {
 
 	handleChange = event => {
 		this.setState({ filter: event.target.value.toLowerCase() });
+		if(this.state.filter!=null){
 		axios.get('https://newsapi.org/v2/everything?q='+this.state.filter+'&sources=the-washington-post&pageSize='+10*this.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
 		).then((response) =>{
 			this.setState({
 				articles: response.data.articles
 			})
 	});}
+	else{var URL = 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize='+10*this.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'; this.fetchNews(URL);}
+
+
+
+}
   
 	render(){
 		console.log(this.state);
@@ -68,8 +71,12 @@ class App extends Component {
 			
 			<div className="App">
 				<div className="header">
-					<h2> US News </h2>
+					<h2> US News 
+						<div className="form">
 					<input value={this.state.filter} onChange={this.handleChange} />
+					</div>
+					</h2>
+					
 				</div>
 
 				
