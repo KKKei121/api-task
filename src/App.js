@@ -17,16 +17,25 @@ class App extends Component {
   }
 
 	componentDidMount(){
-		if (this.state.hasMoreItems){
-			if(this.state.filter!=null)
-				this.setState({filter: this.state.filter.toLowerCase()});
-			this.fetchNews();
+		console.log(this.state);
+		let now = this;
+		if (now.state.hasMoreItems){
+			var URL;
+			if(now.state.filter!=null){
+				now.setState({filter: now.state.filter.toLowerCase()});
+				URL= 'https://newsapi.org/v2/everything?q='+now.state.filter+'sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638'
+			}
+			else
+				URL= 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize=10&page='+now.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638'
+
+			
+			now.fetchNews(URL);
 		}
 			
 	}
 
-	fetchNews=()=>{
-		axios.get('https://newsapi.org/v2/everything?q='+this.state.filter+'sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638')
+	fetchNews=(URL)=>{
+		axios.get(URL)
 		.then((response) =>{
 			this.setState({
 				articles: this.state.articles.concat(response.data.articles)
@@ -61,7 +70,7 @@ class App extends Component {
 				
 				<InfiniteScroll
                 pageStart={0}
-                loadMore={this.componentDidMount}
+                loadMore={() => {this.componentDidMount()}}
 				hasMore={this.state.hasMoreItems}
                 loader={loader}>
 
