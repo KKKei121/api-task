@@ -22,11 +22,10 @@ class App extends Component {
 		if (now.state.hasMoreItems){
 			var URL;
 			if(now.state.filter!=null){
-				now.setState({filter: now.state.filter.toLowerCase()});
-				URL= 'https://newsapi.org/v2/everything?q='+now.state.filter+'sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638'
+				URL= 'https://newsapi.org/v2/everything?q='+now.state.filter+'sources=the-washington-post&pageSize='+10*now.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
 			}
 			else
-				URL= 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize=10&page='+now.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638'
+				URL= 'https://newsapi.org/v2/everything?sources=the-washington-post&pageSize='+10*now.state.page+'&page=1&apiKey=24dc597ec27f40729ac17a7231403638'
 
 			
 			now.fetchNews(URL);
@@ -38,7 +37,7 @@ class App extends Component {
 		axios.get(URL)
 		.then((response) =>{
 			this.setState({
-				articles: this.state.articles.concat(response.data.articles)
+				articles: response.data.articles
 			});
 			console.log(response.data);
 			if(this.state.page<10) {
@@ -53,7 +52,7 @@ class App extends Component {
 	}
 
 	handleChange = event => {
-		this.setState({ filter: event.target.value });
+		this.setState({ filter: event.target.value.toLowerCase() });
 	};
   
 	render(){
