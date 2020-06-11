@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import './App.css';
 import InfiniteScroll from 'react-infinite-scroller';
-import {News} from './News.js';
+import axios from 'axios';
 
 
 
@@ -10,26 +10,37 @@ class App extends Component {
 		super(props);
 		this.state={
 			articles: [],
+			filter: null,
 			hasMoreItems: true,
-			page:1,
-			filter:""
+			page:1
 		};
   }
+
 	componentDidMount(){
-		this.setState({
-			articles: this.state.articles.concat(News(this.state.page,this.state.filter))
-		});
-		console.log(News(this.state.page,this.state.filter));
+		if (this.state.hasMoreItems){
+			if(this.state.filter!=null)
+				this.setState({filter: this.state.filter.toLowerCase()});
+			this.fetchNews();
+		}
+			
+	}
 
-		if(this.state.page<10) {
+	fetchNews=()=>{
+		axios.get('https://newsapi.org/v2/everything?q='+this.state.filter+'sources=the-washington-post&pageSize=10&page='+this.state.page+'&apiKey=24dc597ec27f40729ac17a7231403638')
+		.then((response) =>{
 			this.setState({
-				page: this.state.page+1
+				articles: this.state.articles.concat(response.data.articles)
 			});
-		} else {
-			this.setState({
-				hasMoreItems: false
-			})};
-
+			console.log(response.data);
+			if(this.state.page<10) {
+				this.setState({
+					page: this.state.page+1
+				});
+			} else {
+				this.setState({
+					hasMoreItems: false
+				})};
+		});
 	}
 
 	handleChange = event => {
